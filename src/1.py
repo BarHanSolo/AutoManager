@@ -1,24 +1,24 @@
-import pygame
 import io
 import pickle
 import wcag_contrast_ratio as contrast
 import datetime
 from faker import Faker
-seed="3815637451969776267516610984202742489301"
-numberofteams=10
-numberofraces=20
+seed = "3815637451969776267516610984202742489301"
+numberofteams = 10
+numberofraces = 20
 
-def seedmaker(seed): #makes numerical seed from string
-    numbers="";
-    for x in range(len(seed)):
-        if (seed[x].isnumeric()==True):
-            numbers=numbers+seed[x]
+
+def seedmaker(seed):  # makes numerical seed from string
+    numbers = ""
+    for x in seed:
+        if x.isnumeric():
+            numbers = numbers+x
         else:
-            numbers=numbers+str(ord(seed[x]))
-    while len(numbers)<40:
+            numbers = numbers+str(ord(x))
+    while len(numbers) < 40:
         for y in range(40-len(numbers)):
-            numbers=numbers+numbers[y]
-    if (len(numbers)>40):
+            numbers = numbers+numbers[y]
+    if len(numbers) > 40:
         numbers=numbers[0:40]
     return numbers
 
@@ -33,6 +33,7 @@ def numberofracesgenerator(seed): #makes number of races
     while int(initial)<17 or int(initial)>23:
         initial=int(initial)+5
     return initial
+
 
 def teammaker(numberofteams, seed): #provides list of teams in correct number
     f= open("teamlist.txt","w+") #file with empty teamlist
@@ -75,6 +76,7 @@ def teammaker(numberofteams, seed): #provides list of teams in correct number
     g.close()
     h.close()
 
+
 def personmaker(numberofnames, seed, who): #provides lists of persons
     whonuma='' #number connected to who
     for y in range(len(who)):
@@ -95,6 +97,7 @@ def personmaker(numberofnames, seed, who): #provides lists of persons
         f.close()
         g.close()
         h.close()
+
 
 def colorpicker(numberofsets, seed, who): #provides sets of 3 colors and saves in file
     whonuma='' #number connected to who
@@ -152,6 +155,7 @@ def statsmaker(numberofsets, seed, who, howmany): #makes list of statistics of w
         f.write('\n')
     f.close()
 
+
 def leaguechoser(seed):
     f= open("leagues.txt","r+")
     linesf=f.readlines()
@@ -161,8 +165,10 @@ def leaguechoser(seed):
     leaguelist=league.split("\t")
     pickle.dump(leaguelist, open("league.p", "wb"))
 
+
 def carmaker(seed):#todo
     pass
+
 
 def tracksmaker(numberofraces, seed):
     f= open("localizations.txt","r+")
@@ -188,7 +194,8 @@ def tracksmaker(numberofraces, seed):
         f.close()
         g.close()
 
-def leaguemaker(): #to change when i have two upper
+
+def leaguemaker(): # to change when i have two upper
     leaguelist=pickle.load(open("league.p", "rb"))
     nameofleague=leaguelist[0]
     date = datetime.date(int(leaguelist[1])+int(seed[39]), 1, 1)
@@ -200,4 +207,5 @@ def leaguemaker(): #to change when i have two upper
 #favorite_color = { "lion": "yellow", "kitty": "red" }
 #pickle.dump( favorite_color, open( "save.p", "wb" ) )
 
-tracksmaker(numberofraces, seed)
+
+#tracksmaker(numberofraces, seed)
