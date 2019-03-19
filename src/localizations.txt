@@ -1,0 +1,36 @@
+bs_BA - Bosnia and Herzegovina
+cs_CZ - Czech Republic
+de_DE - Germany
+dk_DK - Denmark
+en_AU - Australia
+en_CA - Canada
+en_GB - Great Britain
+en_NZ - New Zealand
+en_US - United States
+es_ES - Spain
+es_MX - Mexico
+et_EE - Estonia
+fi_FI - Finnland
+fr_FR - France
+hr_HR - Croatia
+hu_HU - Hungary
+it_IT - Italy
+lv_LV - Latvia
+nl_NL - Netherlands
+no_NO - Norway
+pl_PL - Poland
+pt_BR - Brazil
+pt_PT - Portugal
+ro_RO - Romania
+sl_SI - Slovenia
+sv_SE - Sweden
+tr_TR - Turkey
+lt_LT - Lithuania
+fr_FR - Belgium
+de_DE - Switzerland
+de_DE - Austria
+de_DE - Liechtenstein
+fr_FR - Monaco
+cs_CZ - Slovakia
+es_ES - Mexico
+es_ES - Argentina

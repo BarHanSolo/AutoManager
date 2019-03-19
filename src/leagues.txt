@@ -1,0 +1,4 @@
+Formula One World Championship	all	all	all	1.0
+Australian Drivers' Championship	1957	Dallara	aus	0.4
+Formula Palmer Audi	1998	Formula Palmer Audi car	eur	0.6
+FIA Formula E Championship	2014	Spark-Dallara	all	0.6
