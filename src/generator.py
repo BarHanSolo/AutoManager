@@ -3,6 +3,7 @@ import io
 import pickle
 import wcag_contrast_ratio as contrast
 import datetime
+import random
 from faker import Faker
 seed="3815637451969776267516610984202742489301"
 numberofteams=10
@@ -165,28 +166,18 @@ def carmaker(seed):#todo
     pass
 
 def tracksmaker(numberofraces, seed):
-    f= open("localizations.txt","r+")
-    linesf=f.readlines()
+    random.seed(seed)
+    f = open("localizations.txt","r+")
+    linesf = f.readlines()
     with io.open("tracklist.txt", 'w+', encoding='utf8') as g:
-        for x in range(numberofraces):
-            h=open("tracklist.txt", "r+")
-            linesg=g.readlines()
-            numa=seed[x+1:x+4] #quasi random number from seed to generate country
-            countrynumber=(int(numa))%len(linesf)
-            country=linesf[countrynumber].split(' - ')
-            j=1
-            g.close()
-            print(*g)
-            while country[1] in g:
-                country = linesf[countrynumber+j].split(' - ')
-                j=j+1
+        temprand=random.sample(linesf, numberofraces)
+        for xd in temprand:
+            country=xd.split(' - ')
             fake = Faker(country[0])
-            fake.seed(seed+str(x))
+            fake.seed(seed+str(xd))
             var1 = fake.city()+'\n'
             g.write("GP of "+ country[1].rstrip()+ " in " + var1)
-            h.close()
-        f.close()
-        g.close()
+    f.close()
 
 def leaguemaker(): #to change when i have two upper
     leaguelist=pickle.load(open("league.p", "rb"))

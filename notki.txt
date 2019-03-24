@@ -1,0 +1,16 @@
+seed
+number of teams
+number of races
+teams
+drivers
+bosses
+someone else
+colors for cars
+colors for helmets
+stats for teams
+stats for cars
+stats for drivers
+stats for bosses
+league chose
+track list make
+track make (stats, how it looks)
