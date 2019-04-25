@@ -1,20 +1,20 @@
-GP of Belgium in Saint Christophe
-GP of France in PerretVille
-GP of Liechtenstein in Eisleben
-GP of Hungary in ligetháza
-GP of Norway in Ingridås
-GP of Lithuania in Lake Gytė
-GP of Switzerland in Fürstenfeldbruck
-GP of Estonia in Port Juriside
-GP of Monaco in Delannoyboeuf
-GP of Croatia in Biograd na Moru
-GP of Mexico in San Víctor de la Montaña
-GP of Turkey in North Ergenerside
-GP of Romania in Lake Jane
-GP of Germany in Warendorf
-GP of Finnland in Haapavesi
-GP of Mexico in Cáceres
-GP of Great Britain in South Allanton
-GP of Bosnia and Herzegovina in East Paulstad
-GP of Spain in Cáceres
-GP of Austria in Pirmasens
+fr_FR - Belgium
+fr_FR - France
+de_DE - Liechtenstein
+hu_HU - Hungary
+no_NO - Norway
+lt_LT - Lithuania
+de_DE - Switzerland
+et_EE - Estonia
+fr_FR - Monaco
+hr_HR - Croatia
+es_MX - Mexico
+tr_TR - Turkey
+ro_RO - Romania
+de_DE - Germany
+fi_FI - Finnland
+es_ES - Mexico
+en_GB - Great Britain
+bs_BA - Bosnia and Herzegovina
+es_ES - Spain
+de_DE - Austria

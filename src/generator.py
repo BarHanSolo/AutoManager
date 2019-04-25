@@ -197,3 +197,5 @@ def tracksmaker(numberofraces, seed):
         g.writelines(random.sample(linesf, numberofraces))
 
     f.close()
+
+tracksmaker(numberofraces, seed)
