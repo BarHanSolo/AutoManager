@@ -198,4 +198,20 @@ def tracksmaker(numberofraces, seed):
 
     f.close()
 
-tracksmaker(numberofraces, seed)
+def helmetColors(name):
+    fake=Faker()
+    fake.seed(name)
+    col1=fake.hex_color()
+    name=name+' '
+    fake.seed(name)
+    col2=fake.hex_color()
+    name=name+' '
+    fake.seed(name)
+    col3=fake.hex_color()
+    return col1, col2, col3
+
+def helmetDrawer(name):
+    col = helmetColors(name)
+    print(col)
+
+helmetDrawer("Andrzej Lippa")
