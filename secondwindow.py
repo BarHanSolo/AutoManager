@@ -9,25 +9,21 @@ from PIL import Image, ImageDraw
 import pickle
 from colour import Color
 import colorsys
-import random
+import random, os
 from firstwindow import MenuMenu, MenuOptions
 from inspect import getfullargspec
 import math
 #def callback():
 #    print("click!")
-saveName='sav1'
+#saveName='sav1'
 windowWidth=800
 windowHeight=400
 buttonWidth=mfloor((windowWidth/7)/7.5)
 trackname1="Tu na razie jest ściernisco ale będzie San Francisco"
-with open('sav1', 'rb') as f:
-    data = pickle.load(f)
-color0=data['playercolors'][0]
-color1=data['playercolors'][1]
-color2=data['playercolors'][2]
-color0hex='#%02x%02x%02x' % color0
-color1hex='#%02x%02x%02x' % color1
-color2hex='#%02x%02x%02x' % color2
+data={}
+color0hex='Red'
+color1hex='Red'
+color2hex='Red'
 colorbgmenu='#ff2800'
 colortextmenu='#FCD112'
 
@@ -40,10 +36,10 @@ class SampleApp(tk.Tk):
         # on top of each other, then the one we want visible
         # will be raised above the others
         container = tk.Frame(self)
+        print(container)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
-
         self.frames = {}
         for F in (StatsPage, CarPage, DriversPage, MoneyPage, WikiPage, RanksPage, EscPage, MenuMenu, OptionsMenu, NewGameMenu, LoadGameMenu):
             page_name = F.__name__
@@ -57,7 +53,6 @@ class SampleApp(tk.Tk):
             # the one on the top of the stacking order
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
-
         self.show_frame("MenuMenu")
 
     def show_frame(self, page_name):
@@ -65,18 +60,33 @@ class SampleApp(tk.Tk):
         frame = self.frames[page_name]
         frame.tkraise()
 
+    def reload_frames(self):
+        pass
+
     def save_game(self, save_name):
         '''save all things'''
         with open(save_name, 'wb') as f:
             pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
         messagebox.showinfo(save_name, "Game saved")
 
+class GameLoading(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller=controller
+
     def load_game(self, save_name):
         '''load all things'''
         global data
-        with open(save_name, 'rb') as f:
+        with open('saves/'+save_name, 'rb') as f:
             data = pickle.load(f)
-        messagebox.showinfo(save_name, "Game loaded")
+        color0=data['playercolors'][0]
+        color1=data['playercolors'][1]
+        color2=data['playercolors'][2]
+        color0hex='#%02x%02x%02x' % color0
+        color1hex='#%02x%02x%02x' % color1
+        color2hex='#%02x%02x%02x' % color2
+        #messagebox.showinfo(save_name, "Game loaded")
+        self.controller.show_frame("StatsPage")
 
 class Draw(tk.Frame):
     def colors(name, count):
@@ -239,15 +249,15 @@ class BackMenu(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller=controller
+        Frame(self, bg=colortextmenu, height=5, width=windowWidth).grid(row=0, column=1, columnspan=7)
         Frame(self, bg=colortextmenu, height=5, width=windowWidth).grid(row=10, column=1, columnspan=7)
         tk.Button(self, text="Back", command=lambda: controller.show_frame("MenuMenu"), width = buttonWidth, bg=colorbgmenu, fg=colortextmenu).grid(row=11, column=2, pady=10)
-        tk.Button(self, text="OK", command=lambda: controller.show_frame("MenuMenu"), width = buttonWidth, bg=colorbgmenu, fg=colortextmenu).grid(row=11, column=5, pady=10) #przyciski na dole z paskiem, back oraz ok
+         #przyciski na dole z paskiem, back oraz ok
 
 class MenuMenu(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        #tk.Label(self, text="", font=controller.title_font,bg=controller.bgCol).grid(sticky="W",row=1, column=1, columnspan=7, padx=10)
         Frame(self, bg=colortextmenu, height=5, width=windowWidth).grid(row=0, column=1, columnspan=7)
         tk.Button(self, text="New game", command =lambda: controller.show_frame("NewGameMenu"), width = buttonWidth, bg=colorbgmenu, fg=colortextmenu).grid(row=1, column=4, pady=10)
         tk.Button(self, text="Load game", command =lambda: controller.show_frame("LoadGameMenu"), width = buttonWidth, bg=colorbgmenu, fg=colortextmenu).grid(row=2, column=4, pady=10)
@@ -272,6 +282,13 @@ class LoadGameMenu(BackMenu):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         BackMenu.__init__(self, parent, controller)
+        tk.Label(self, text="Choose your savefile:", font=controller.title_font, bg=colorbgmenu, fg=colortextmenu).grid(row=3, column=1, columnspan=3, pady=10)
+        listbox=tk.Listbox(self, bg=colortextmenu, fg=colorbgmenu,selectbackground="Red",highlightcolor="Red")
+        listbox.grid(row=5, column=3, columnspan=3, pady=10)
+        for name in os.listdir('./saves'):
+            listbox.insert('end', name)
+        tk.Button(self, text="OK", command=lambda: GameLoading.load_game(self, listbox.get(listbox.curselection())), width = buttonWidth, bg=colorbgmenu, fg=colortextmenu).grid(row=11, column=6, pady=10)
+
 
 class MenuPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -294,9 +311,9 @@ class StatsPage(MenuPage):
         self.controller = controller
         MenuPage.__init__(self, parent, controller)
         tk.Label(self, text="Stats of Your team", font=controller.title_font,bg=controller.bgCol).grid(sticky="W",row=1, column=1, columnspan=7, padx=10)
-        tk.Label(self, text=color0, font=controller.title_font,bg=controller.bgCol).grid(row=3, column=1, columnspan=7)
-        tk.Label(self, text=color1, font=controller.title_font,bg=controller.bgCol).grid(row=4, column=1, columnspan=7)
-        tk.Label(self, text=color2, font=controller.title_font,bg=controller.bgCol).grid(row=5, column=1, columnspan=7)
+        #tk.Label(self, text=color0, font=controller.title_font,bg=controller.bgCol).grid(row=3, column=1, columnspan=7)
+        #tk.Label(self, text=color1, font=controller.title_font,bg=controller.bgCol).grid(row=4, column=1, columnspan=7)
+        #tk.Label(self, text=color2, font=controller.title_font,bg=controller.bgCol).grid(row=5, column=1, columnspan=7)
 
 class CarPage(MenuPage):
     def __init__(self, parent, controller):
@@ -345,7 +362,7 @@ class EscPage(MenuPage):
         MenuPage.__init__(self, parent, controller)
         buttonWidth=mfloor((windowWidth/7)/7.5)
         tk.Label(self, text="Menu", font=controller.title_font,bg=controller.bgCol).grid(sticky="W",row=1, column=1, columnspan=7, padx=10)
-        tk.Button(self, text="Save", command=lambda: controller.save_game('sav1'), width = buttonWidth, bg=color0hex).grid(row=3, column=4)
+        #tk.Button(self, text="Save", command=lambda: controller.save_game('sav1'), width = buttonWidth, bg=color0hex).grid(row=3, column=4)
         tk.Button(self, text="Load", command=lambda: controller.load_game("EscPage"), width = buttonWidth, bg=color0hex).grid(row=4, column=4)
         tk.Button(self, text="Options", command=lambda: controller.show_frame("EscPage"), width = buttonWidth, bg=color0hex).grid(row=5, column=4)
         tk.Button(self, text="Exit to main menu", command =lambda: controller.show_frame("MenuMenu"), width = buttonWidth, bg=color0hex).grid(row=6, column=4)
@@ -355,7 +372,7 @@ if __name__ == "__main__":
     app = SampleApp()
     app.title("AutoManager")
     #Draw.helmetDraw("Ferrario12345678", app.frames['DriversPage'].helmet1)
-    Draw.trackDraw(trackname1, app.frames['DriversPage'].helmet1)
+    #Draw.trackDraw(trackname1, app.frames['DriversPage'].helmet1)
     back = tk.Frame(master=app, width=windowWidth, height=windowHeight, bg=color0hex)
     back.pack()
     app.mainloop()

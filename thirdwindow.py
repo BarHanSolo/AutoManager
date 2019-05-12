@@ -1,42 +1,91 @@
-from tkinter import *
+import tkinter as tk
 
+class SampleApp(tk.Tk):
 
-class Buttons:
+    def __init__(self, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
 
-	def __init__(self, master):
-		self.master = master
-		self.frame = Frame(self.master)
-		self.b1 = Button(self.master, text="Button1", command=self.display)
-		self.b2 = Button(self.master, text="Button2", command=self.new_window)
-		self.b1.pack()
-		self.b2.pack()
-		self.frame.pack()
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
 
-	def display(self):
-		print ('Hello Button1')
+        self.frames = {}
 
-	def new_window(self):
-		self.master.withdraw()
-		self.newWindow = Toplevel(self.master)
-		bb = Buttons1(self.newWindow)
+        # alternate ways to create the frames & append to frames dict: comment out one or the other
 
+        for F in (StartPage, PLG):
+            page_name = F.__name__
+            frame = F(parent=container, controller=self)
+            self.frames[page_name] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
 
+        # self.frames["StartPage"] = StartPage(parent=container, controller=self)
+        # self.frames["PLG"] = PLG(parent=container, controller=self)
+        # self.frames["StartPage"].grid(row=0, column=0, sticky="nsew")
+        # self.frames["PLG"].grid(row=0, column=0, sticky="nsew")
 
-class Buttons1():
+        self.show_frame("StartPage")
 
-	def __init__(self, master):
-		self.master = master
-		self.frame = Frame(self.master)
-		self.b3 = Button(self.master, text="Button3", command=self.display3)
-		self.b3.pack()
-		self.frame.pack()
+    # alternate version of show_frame: comment out one or the other
 
+    def show_frame(self, page_name):
+        for frame in self.frames.values():
+            frame.grid_remove()
+        frame = self.frames[page_name]
+        frame.grid()
 
-	def display3(self):
-		print ('hello button3')
+    # def show_frame(self, page_name):
+        # frame = self.frames[page_name]
+        # frame.tkraise()
 
+class StartPage(tk.Frame):
 
-if __name__ == '__main__':
-	root = Tk()
-	b = Buttons(root)
-	root.mainloop()
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        label = tk.Label(self, text="start page")
+        label.pack(side="top", fill="x", pady=10)
+
+        button1 = tk.Button(self, text="Go to Page One", command=lambda: controller.show_frame("PLG"))
+        button1.pack()
+
+        button2 = tk.Button(self, text="focus traversal demo only")
+        button2.pack()
+        button2.focus_set()
+
+        button3 = tk.Button(self, text="another dummy button")
+        button3.pack()
+
+        lbl = tk.Label(self, text="tkraise messes up focus traversal\nwhich you can see by testing the two versions of show_frame.()\nUsing grid_remove instead of tkraise solves that,\nwhile preventing frames from being unable to resize to fit their own contents.")
+        lbl.pack()
+
+class PLG(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        label = tk.Label(self, text="Enter something below; the two buttons clear what you type.")
+        label.pack(side="top", fill="x", pady=10)
+        self.wentry = tk.Entry(self)
+        self.wentry.pack(pady = 10)
+        self.text = tk.Text(self)
+        self.text.pack(pady = 10)
+        restart_button = tk.Button(self, text="Restart", command=self.restart)
+        restart_button.pack()
+        refresh_button = tk.Button(self, text="Refresh", command=self.refresh)
+        refresh_button.pack()
+
+    def restart(self):
+        self.refresh()
+        self.controller.show_frame("StartPage")
+
+    def refresh(self):
+        self.wentry.delete(0, "end")
+        self.text.delete("1.0", "end")
+        # set focus to any widget except a Text widget so focus doesn't get stuck in a Text widget when page hides
+        self.wentry.focus_set()
+
+if __name__ == "__main__":
+    app = SampleApp()
+    app.mainloop()
